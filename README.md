@@ -77,7 +77,7 @@ moderation:
 
 ## Requirements
 
-- Minecraft Server 1.20.4+
+- Minecraft Server 1.20.2+
 - Spigot, Paper, Folia, or Luminol
 - Java 17+
 - OpenAI API key (for AI moderation)
