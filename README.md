@@ -16,10 +16,11 @@ A sophisticated Minecraft Spigot plugin that uses AI technology to automatically
 ## Installation
 
 1. Download the plugin JAR file
-2. Place it in your server's `plugins/` folder
-3. Start your server to generate the configuration files
-4. Configure your OpenAI API key in `plugins/ChatModerator/config.yml`
-5. Restart your server or use `/chatmod reload`
+2. Stop your server
+3. Place it in your server's `plugins/` folder
+4. Start your server to generate the configuration files
+5. Configure your OpenAI API key in `plugins/ChatModerator/config.yml`
+6. Restart your server or use `/chatmod reload`
 
 ## Configuration
 
