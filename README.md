@@ -61,6 +61,8 @@ moderation:
 - `/chatmod toggle` - Enable/disable moderation
 - `/chatmod add-word <word>` - Add word to block list
 - `/chatmod remove-word <word>` - Remove word from block list
+- `/chatmod unmute <player>` - Unmute a player after they've said a blocked word
+- `/chatmod aitest <word>` - Test your api key
 
 ## Permissions
 
