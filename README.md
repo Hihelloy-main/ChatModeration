@@ -1,6 +1,7 @@
 [![Maven CI](https://img.shields.io/github/actions/workflow/status/Hihelloy-main/ChatModeration/maven.yml?branch=master&style=flat-square)](https://github.com/Hihelloy-main/ChatModeration/actions)
 [![GitHub release](https://img.shields.io/github/v/release/Hihelloy-main/ChatModeration?style=flat-square)](https://github.com/Hihelloy-main/ChatModeration/releases)
 [![Github Downloads](https://img.shields.io/github/downloads/Hihelloy-main/ChatModeration/total.svg)](https://github.com/Hihelloy-main/ChatModeration/releases)
+![SpigotMC Downloads](https://img.shields.io/spiget/downloads/128458?label=Spigot%20Downloads)
 
 # ChatModerator - AI-Powered Minecraft Chat Moderation Plugin
 
