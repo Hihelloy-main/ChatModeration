@@ -1,3 +1,6 @@
+[![GitHub release](https://img.shields.io/github/v/release/Hihelloy-main/ChatModeration?style=flat-square)](https://github.com/Hihelloy-main/ChatModeration/releases)
+[![Github Downloads](https://img.shields.io/github/downloads/Hihelloy-main/ChatModeration/total.svg)](https://github.com/Hihelloy-main/ChatModeration/releases)
+
 # ChatModerator - AI-Powered Minecraft Chat Moderation Plugin
 
 A sophisticated Minecraft Spigot plugin that uses AI technology to automatically moderate chat messages, keeping your server safe and friendly.
