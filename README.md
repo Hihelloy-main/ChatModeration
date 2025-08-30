@@ -1,7 +1,7 @@
 [![Maven CI](https://img.shields.io/github/actions/workflow/status/Hihelloy-main/ChatModeration/maven.yml?branch=master&style=for-the-badge)](https://github.com/Hihelloy-main/ChatModeration/actions)
 [![GitHub release](https://img.shields.io/github/v/release/Hihelloy-main/ChatModeration?style=for-the-badge)](https://github.com/Hihelloy-main/ChatModeration/releases)
 [![Github Downloads](https://img.shields.io/github/downloads/Hihelloy-main/ChatModeration/total.svg)](https://github.com/Hihelloy-main/ChatModeration/releases)
-![SpigotMC Downloads](https://img.shields.io/spiget/downloads/128458?label=Spigot%20Downloads)](https://www.spigotmc.org/resources/chatmoderator.128458/)
+![SpigotMC Downloads](https://img.shields.io/spiget/downloads/128458?label=Spigot%20Downloads)(https://www.spigotmc.org/resources/chatmoderator.128458/)
 ![Modrinth Downloads](https://img.shields.io/modrinth/dt/chatmoderator?label=Modrinth%20Downloads)
 
 
