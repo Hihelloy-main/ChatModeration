@@ -3,7 +3,7 @@
 [![Github Downloads](https://img.shields.io/github/downloads/Hihelloy-main/ChatModeration/total.svg)](https://github.com/Hihelloy-main/ChatModeration/releases)
 ![SpigotMC Downloads](https://img.shields.io/spiget/downloads/128458?label=Spigot%20Downloads)
 ![Modrinth Downloads](https://img.shields.io/modrinth/dt/chatmoderator?label=Modrinth%20Downloads)
-![Paper Hangar Downloads](https://img.shields.io/badge/dynamic/json?color=blue&label=Paper%20Hangar%20Downloads&query=$.downloads&url=https://hangar.papermc.io/api/v2/projects/Hihelloy/AIChatModerator)
+![Paper Hangar Downloads](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Hihelloy/AIChatModerator/main/hangar.json)
 
 # ChatModerator - AI-Powered Minecraft Chat Moderation Plugin
 
