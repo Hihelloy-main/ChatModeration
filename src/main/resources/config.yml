@@ -1,0 +1,57 @@
+# Chat Moderator Configuration
+# AI-powered chat moderation settings
+
+# OpenAI API Configuration
+openai:
+  api-key: "your-openai-api-key-here"
+  model: "text-moderation-latest"
+  
+# Moderation Settings
+moderation:
+  enabled: true
+  use-ai-moderation: true
+  use-word-filter: true
+  mute-duration-seconds: 600
+
+  
+  # Custom blocked words (case-insensitive)
+  blocked-words:
+    - "badword1"
+    - "badword2"
+    - "spam"
+    - "grief"
+  
+  # AI moderation thresholds (0.0 to 1.0)
+  thresholds:
+    hate: 0.3
+    hate-threatening: 0.3
+    harassment: 0.3
+    harassment-threatening: 0.3
+    self-harm: 0.3
+    self-harm-intent: 0.3
+    self-harm-instructions: 0.3
+    sexual: 0.5
+    sexual-minors: 0.1
+    violence: 0.3
+    violence-graphic: 0.3
+
+# Actions when moderation is triggered
+actions:
+  block-message: true
+  warn-player: true
+  notify-admins: true
+  log-violations: true
+  
+# Messages
+messages:
+  message-blocked: "&cYour message was blocked by the chat filter."
+  violation-warning: "&eYour message contains inappropriate content. You have been muted, ask an admin for an unmute."
+  admin-notification: "&6[ChatMod] &c{player} &7tried to send: &f{message}"
+  plugin-reloaded: "&aChat Moderator configuration reloaded!"
+  plugin-enabled: "&aChat moderation enabled!"
+  plugin-disabled: "&cChat moderation disabled!"
+  
+# Debug settings
+debug:
+  enabled: false
+  log-all-messages: false
