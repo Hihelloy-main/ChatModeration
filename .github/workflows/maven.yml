@@ -39,4 +39,3 @@ jobs:
       # Optional: Uploads the full dependency graph to GitHub
       - name: Update dependency graph
         uses: advanced-security/maven-dependency-submission-action@v4
-
