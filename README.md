@@ -113,6 +113,8 @@ This project is licensed under the MIT License.
 
 ## Downloads
 Spigot: https://www.spigotmc.org/resources/chatmoderator.128458/
+
 Modrinth: https://modrinth.com/plugin/chatmoderator
+
 Github: https://github.com/Hihelloy-main/ChatModerator
 
