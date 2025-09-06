@@ -3,6 +3,7 @@ package com.example.chatmoderator.listeners;
 import com.example.chatmoderator.ChatModeratorPlugin;
 import com.example.chatmoderator.config.ConfigManager;
 import com.example.chatmoderator.services.ModerationService;
+import com.example.chatmoderator.utils.ModerationResult;
 import com.example.chatmoderator.utils.SchedulerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,7 +22,6 @@ public class ChatListener implements Listener {
     private final ConfigManager configManager;
     private final ModerationService moderationService;
 
-    // Map to store muted players and their unmute timestamp
     private final Map<Player, Long> mutedPlayers = new ConcurrentHashMap<>();
 
     public ChatListener(ChatModeratorPlugin plugin) {
@@ -53,24 +53,33 @@ public class ChatListener implements Listener {
             }
         }
 
-        // Bypass permission: allow message to go through instantly
+        // Bypass permission
         if (player.hasPermission("chatmoderator.bypass")) {
             return;
         }
 
-        // Post-send AI moderation
+        // AI Moderation (async)
         if (configManager.isAIModerationEnabled()) {
-            // Message already sent, now check asynchronously
-            moderationService.moderateAfterSend(player, message);
+            moderationService.checkAIModerationAsync(message)
+                    .thenAccept(moderationResult -> {
+                        if (moderationResult.isBlocked()) {
+                            // Ensure cancellation and player notification run on main thread
+                            SchedulerUtil.runGlobal(() -> {
+                                event.setCancelled(true);
+                                blockMessage(player, message, moderationResult.getReason());
+                            });
+                        }
+                    });
         }
     }
 
     private void blockMessage(Player player, String message, String reason) {
-        // Cancel sending for everyone
+        // Notify moderators
         SchedulerUtil.runGlobal(() -> {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (p.isOp() || p.hasPermission("chatmoderator.bypass")) {
-                    p.sendMessage(ChatColor.RED + "[MODERATION] " + player.getName() + " tried to send: " + message + " | Reason: " + reason);
+                    p.sendMessage(ChatColor.RED + "[MODERATION] " + player.getName()
+                            + " tried to send: " + message + " | Reason: " + reason);
                 }
             }
         });
@@ -79,20 +88,21 @@ public class ChatListener implements Listener {
         int muteDurationSeconds = configManager.getMuteDurationSeconds();
         mutedPlayers.put(player, System.currentTimeMillis() + muteDurationSeconds * 1000L);
 
-        // Warn the player
+        // Warn player
         if (configManager.shouldWarnPlayer()) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', configManager.getViolationWarning()));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                    configManager.getViolationWarning()));
         }
 
-        // Log violation
+        // Log
         if (configManager.shouldLogViolations()) {
-            plugin.getLogger().warning("Chat violation by " + player.getName() + " | Reason: " + reason + " | Message: " + message);
+            plugin.getLogger().warning("Chat violation by " + player.getName()
+                    + " | Reason: " + reason + " | Message: " + message);
         }
     }
 
     public boolean isMuted(Player player) {
         if (!mutedPlayers.containsKey(player)) return false;
-
         long unmuteTime = mutedPlayers.get(player);
         if (System.currentTimeMillis() >= unmuteTime) {
             mutedPlayers.remove(player);

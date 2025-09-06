@@ -34,37 +34,46 @@ public class ChatModeratorPlugin extends JavaPlugin {
         // Initialize scheduler utility
         schedulerUtil = new SchedulerUtil(this);
 
-        // Initialize configuration
+        // Load configuration
         configManager = new ConfigManager(this);
         configManager.loadConfig();
 
-        // Initialize moderation service
-        moderationService = new ModerationService(this);
+        // Initialize ModerationService (fully initialized)
+        moderationService = new ModerationService(this, configManager);
 
-        // Initialize ChatListener (pass plugin to constructor)
+        // Initialize ChatListener
         chatListener = new ChatListener(this);
 
         // Register event listeners
         getServer().getPluginManager().registerEvents(chatListener, this);
 
-        // Register commands with the listener passed
+        // Register commands
         ChatModCommand chatModCommand = new ChatModCommand(this, chatListener);
         getCommand("chatmod").setExecutor(chatModCommand);
         getCommand("chatmod").setTabCompleter(chatModCommand);
 
         log.info("ChatModerator plugin has been enabled!");
 
-        // Check if OpenAI API key is configured
-        String apiKey = configManager.getOpenAIApiKey();
-        if (apiKey == null || apiKey.equals("your-openai-api-key-here")) {
-            log.warning("OpenAI API key not configured! Please set it in config.yml");
-            log.warning("AI moderation will be disabled until API key is provided.");
-        }
+        // Warn if AI keys missing
+        checkAPIKeys();
     }
 
     @Override
     public void onDisable() {
+        SchedulerUtil.shutdown();
         log.info("ChatModerator plugin has been disabled!");
+    }
+
+    private void checkAPIKeys() {
+        String aiProvider = configManager.getPreferredAIProvider();
+        String openaiApiKey = configManager.getOpenAIApiKey();
+        String geminiApiKey = configManager.getGeminiApiKey();
+
+        if ("openai".equalsIgnoreCase(aiProvider) && (openaiApiKey == null || openaiApiKey.equals("your-openai-api-key-here"))) {
+            log.warning("OpenAI API key not configured! AI moderation will be disabled until key is provided.");
+        } else if ("gemini".equalsIgnoreCase(aiProvider) && (geminiApiKey == null || geminiApiKey.equals("your-gemini-api-key-here"))) {
+            log.warning("Gemini API key not configured! AI moderation will be disabled until key is provided.");
+        }
     }
 
     public ConfigManager getConfigManager() {
@@ -79,13 +88,13 @@ public class ChatModeratorPlugin extends JavaPlugin {
         return schedulerUtil;
     }
 
-    public void reloadPluginConfig() {
-        configManager.reloadConfig();
-        moderationService.updateConfiguration();
-        Bukkit.getLogger().info("ChatModerator reloaded!");
-    }
-
     public ChatListener getChatListener() {
         return chatListener;
+    }
+
+    public void reloadPluginConfig() {
+        configManager.reloadConfig();
+        configManager.applyNewConfigOptions();
+        Bukkit.getLogger().info("ChatModerator reloaded!");
     }
 }

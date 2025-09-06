@@ -4,7 +4,8 @@ import com.example.chatmoderator.ChatModeratorPlugin;
 import com.example.chatmoderator.config.ConfigManager;
 import com.example.chatmoderator.listeners.ChatListener;
 import com.example.chatmoderator.services.ModerationService;
-import com.example.chatmoderator.services.ModerationService.ModerationResult;
+import com.example.chatmoderator.utils.ModerationResult;
+import com.example.chatmoderator.utils.SchedulerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.*;
@@ -12,7 +13,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ChatModCommand implements CommandExecutor, TabCompleter {
@@ -142,23 +142,30 @@ public class ChatModCommand implements CommandExecutor, TabCompleter {
                 (configManager.isWordFilterEnabled() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"));
         sender.sendMessage(ChatColor.YELLOW + "Blocked Words: " + ChatColor.WHITE + configManager.getBlockedWords().size());
 
-        String apiKey = configManager.getOpenAIApiKey();
-        boolean apiConfigured = apiKey != null && !apiKey.equals("your-openai-api-key-here");
+        // API checks
+        boolean openaiConfigured = configManager.getOpenAIApiKey() != null &&
+                !configManager.getOpenAIApiKey().equals("your-openai-api-key-here");
         sender.sendMessage(ChatColor.YELLOW + "OpenAI API: " +
-                (apiConfigured ? ChatColor.GREEN + "Configured" : ChatColor.RED + "Not Configured"));
+                (openaiConfigured ? ChatColor.GREEN + "Configured" : ChatColor.RED + "Not Configured"));
+
+        boolean geminiConfigured = configManager.getGeminiApiKey() != null &&
+                !configManager.getGeminiApiKey().equals("your-gemini-api-key-here");
+        sender.sendMessage(ChatColor.YELLOW + "Gemini API: " +
+                (geminiConfigured ? ChatColor.GREEN + "Configured" : ChatColor.RED + "Not Configured"));
+
+        String preferredProvider = configManager.getPreferredAIProvider();
+        sender.sendMessage(ChatColor.YELLOW + "Preferred AI Provider: " +
+                (preferredProvider != null ? ChatColor.GREEN + preferredProvider : ChatColor.RED + "Not Configured"));
     }
 
     private void handleToggle(CommandSender sender) {
         FileConfiguration config = plugin.getConfig();
-        boolean currentState = configManager.isModerationEnabled();
-        boolean newState = !currentState;
-
+        boolean newState = !configManager.isModerationEnabled();
         config.set("moderation.enabled", newState);
         plugin.saveConfig();
         configManager.reloadConfig();
-
-        String message = newState ? configManager.getPluginEnabled() : configManager.getPluginDisabled();
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                newState ? configManager.getPluginEnabled() : configManager.getPluginDisabled()));
     }
 
     private void handleAddWord(CommandSender sender, String word) {
@@ -174,7 +181,6 @@ public class ChatModCommand implements CommandExecutor, TabCompleter {
         config.set("moderation.blocked-words", blockedWords);
         plugin.saveConfig();
         configManager.reloadConfig();
-
         sender.sendMessage(ChatColor.GREEN + "Added '" + word + "' to blocked words list.");
     }
 
@@ -191,7 +197,6 @@ public class ChatModCommand implements CommandExecutor, TabCompleter {
         config.set("moderation.blocked-words", blockedWords);
         plugin.saveConfig();
         configManager.reloadConfig();
-
         sender.sendMessage(ChatColor.GREEN + "Removed '" + word + "' from blocked words list.");
     }
 
@@ -205,19 +210,20 @@ public class ChatModCommand implements CommandExecutor, TabCompleter {
         if (chatListener.isMuted(target)) {
             chatListener.unmutePlayer(target);
             sender.sendMessage(ChatColor.GREEN + "Player " + target.getName() + " has been unmuted.");
-            Bukkit.broadcast("Player " + target.getName() + " has been unmuted.", "chatmoderator.null");
-
         } else {
             sender.sendMessage(ChatColor.RED + "Player " + target.getName() + " is not muted.");
         }
     }
 
     private void handleAITest(CommandSender sender, String message) {
-        // Run AI moderation asynchronously without blocking main thread
-        moderationService.moderateMessageTest(message).thenAccept(result -> {
-            sender.sendMessage(ChatColor.GOLD + "=== AI Moderation Test Result ===");
-            sender.sendMessage(ChatColor.YELLOW + "Blocked: " + (result.isBlocked() ? ChatColor.RED + "Yes" : ChatColor.GREEN + "No"));
-            sender.sendMessage(ChatColor.YELLOW + "Reason: " + result.getReason());
+        sender.sendMessage(ChatColor.GOLD + "Running AI moderation test...");
+
+        moderationService.checkAIModerationAsync(message).thenAccept(result -> {
+            SchedulerUtil.runGlobal(() -> {
+                sender.sendMessage(ChatColor.GOLD + "=== AI Moderation Test Result ===");
+                sender.sendMessage(ChatColor.YELLOW + "Blocked: " + (result.isBlocked() ? ChatColor.RED + "Yes" : ChatColor.GREEN + "No"));
+                sender.sendMessage(ChatColor.YELLOW + "Reason: " + result.getReason());
+            });
         });
     }
 
