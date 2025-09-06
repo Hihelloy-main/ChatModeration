@@ -1,0 +1,65 @@
+# Chat Moderator Plugin Configuration
+
+# General moderation settings
+moderation:
+  enabled: true  # Enable or disable the entire moderation system
+  use-ai-moderation: true  # Enable AI moderation (OpenAI or Gemini)
+  use-word-filter: true  # Enable word filtering
+  mute-duration-seconds: 600  # Duration (in seconds) for muting a player after a violation (10 minutes)
+
+  # Word filter configuration
+  blocked-words:  # List of words that will be blocked from chat
+    - "badword1"
+    - "badword2"
+    - "spam"
+    - "inappropriate"
+    - "offensiveword"
+
+  # AI moderation thresholds (0.0 to 1.0), these control the sensitivity of moderation
+  thresholds:
+    harassment: 0.7  # Threshold for harassment-related content
+    hate: 0.7  # Threshold for hate speech
+    self-harm: 0.8  # Threshold for self-harm-related content
+    sexual: 0.8  # Threshold for sexual content
+    violence: 0.7  # Threshold for violent content
+    hate/threatening: 0.8  # Threshold for hate or threatening content
+    self-harm/intent: 0.9  # Threshold for self-harm intent
+    self-harm/instructions: 0.9  # Threshold for self-harm instructions
+    sexual/minors: 0.9  # Threshold for sexual content involving minors
+    violence/graphic: 0.8  # Threshold for graphic violence
+
+# OpenAI API Configuration
+openai:
+  api-key: "your-openai-api-key-here"  # Replace with your OpenAI API key
+  model: "text-moderation-latest"  # The OpenAI model used for moderation
+
+# Gemini API Configuration
+gemini:
+  api-key: "your-gemini-api-key-here"  # Replace with your Gemini API key
+  model: "gemini-1.5-flash"  # The Gemini model used for moderation
+
+# AI Provider Settings
+ai:
+  preferred-provider: "openai"  # Choose the AI provider: "openai" or "gemini"
+  # If preferred-provider is set to "gemini", Gemini will be used for moderation instead of OpenAI.
+
+# Action settings - What happens when violations are detected
+actions:
+  block-message: true  # Block the message from being sent if a violation is detected
+  warn-player: true  # Send a warning to the player if their message is blocked
+  notify-admins: true  # Notify admins when a player tries to send a blocked message
+  log-violations: true  # Log violations in the server logs
+
+# Custom messages (Modify these messages as needed)
+messages:
+  message-blocked: "&cYour message was blocked by the chat filter."  # Message shown to the player when their message is blocked
+  violation-warning: "&eYour message contains inappropriate content. You have been muted, ask an admin for an unmute."  # Message for players who are muted
+  admin-notification: "&6[ChatMod] &c{player} &7tried to send: &f{message}"  # Message for admins notifying them of a violation
+  plugin-reloaded: "&aChat Moderator configuration reloaded!"  # Message displayed when the plugin is reloaded
+  plugin-enabled: "&aChat moderation enabled!"  # Message when the moderation system is enabled
+  plugin-disabled: "&cChat moderation disabled!"  # Message when the moderation system is disabled
+
+# Debug settings (Useful for troubleshooting)
+debug:
+  enabled: false  # Enable or disable debug logs (set to true for more detailed logs)
+  log-all-messages: false  # Log all chat messages (useful for debugging but may be verbose)

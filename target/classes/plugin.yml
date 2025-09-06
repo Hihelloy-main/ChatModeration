@@ -1,0 +1,28 @@
+name: ChatModerator
+version: '2.0.0'
+main: com.example.chatmoderator.ChatModeratorPlugin
+folia-supported: true
+api-version: '1.20'
+author: Hihelloy
+description: AI-powered chat moderation plugin
+
+commands:
+  chatmod:
+    description: Chat moderator commands
+    usage: /chatmod <reload|status|toggle|add-word|remove-word|unmute>
+    permission: chatmoderator.admin
+    permission-message: You don't have permission to use this command.
+
+permissions:
+  chatmoderator.admin:
+    description: Allows access to chat moderator admin commands
+    default: op
+  chatmoderator.bypass:
+    description: Allows bypassing chat moderation
+    default: false
+  chatmoderator.command.unmute:
+    description: Allows unmuting muted players via /chatmod unmute
+    default: op
+  chatmoderator.null:
+    description: this permission doesn't do anything
+    default: true
