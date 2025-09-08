@@ -3,7 +3,6 @@
 [![Github Downloads](https://img.shields.io/github/downloads/Hihelloy-main/ChatModeration/total.svg)](https://github.com/Hihelloy-main/ChatModeration/releases)
 ![SpigotMC Downloads](https://img.shields.io/spiget/downloads/128458?label=Spigot%20Downloads)
 ![Modrinth Downloads](https://img.shields.io/modrinth/dt/chatmoderator?label=Modrinth%20Downloads)
-![Polymart Downloads](https://img.shields.io/badge/downloads-1000+-blue?style=for-the-badge&logo=polymart)
 
 # ChatModerator - AI-Powered Minecraft Chat Moderation Plugin
 
