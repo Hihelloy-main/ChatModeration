@@ -118,3 +118,5 @@ Modrinth: https://modrinth.com/plugin/chatmoderator
 
 Github: https://github.com/Hihelloy-main/ChatModerator
 
+PolyMart: https://polymart.org/product/8425/chatmoderator
+
