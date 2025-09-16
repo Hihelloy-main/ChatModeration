@@ -75,12 +75,13 @@ public class ModerationService {
     private ModerationResult checkAIRules(String message) {
         String lower = message.toLowerCase(Locale.ROOT);
 
-        if (lower.contains("hate") || lower.contains("kys") || lower.contains("nigger") || lower.contains("faggot") || lower.contains("negro") || lower.contains("Kill yourself") || lower.contains("gfys") || lower.contains("nga") || lower.contains("nigga") || lower.contains("ngr") || lower.contains("retard") || lower.contains("fag") || lower.contains("sped")) {
-            return ModerationResult.block("Rule: violence/self-harm/hate-speech keyword detected");
+        if (lower.contains("hate") || lower.contains("kys") || lower.contains("nigger") || lower.contains("faggot") || lower.contains("negro") || lower.equalsIgnoreCase("Kill yourself") || lower.contains("gfys") || lower.contains("nga") || lower.contains("nigga") || lower.contains("ngr") || lower.contains("retard") || lower.contains("fag") || lower.contains("sped")) {
+            return ModerationResult.block("Rule: violence/self-harm/hate-speech keyword/keyphrase detected");
         }
-        if (lower.contains("sex") || lower.contains("rape")) {
-            return ModerationResult.block("Rule: sexual content keyword detected");
+        if (lower.contains("sex") || lower.contains("rape") || lower.equalsIgnoreCase("I'm horny") || lower.contains("horny") || lower.contains("nude") || lower.contains("naked") || lower.equalsIgnoreCase("I'm gonna rape you") || lower.equalsIgnoreCase("I'm going to goon") || lower.contains("goon") || lower.contains("blowjob") || lower.equalsIgnoreCase("I'm gonna blow you") || lower.contains("cum") || lower.equalsIgnoreCase("I'm cumming") || lower.equalsIgnoreCase("fuck me in the ass") || lower.equalsIgnoreCase("goon me") || lower.equalsIgnoreCase("fiddle with me") || lower.equalsIgnoreCase("twirl my pubes") || lower.contains("pubes") || lower.equalsIgnoreCase("blow me")) {
+            return ModerationResult.block("Rule: sexual content keyword/keyphrase detected");
         }
         return ModerationResult.safe();
     }
+
 }

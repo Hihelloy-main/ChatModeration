@@ -1,9 +1,0 @@
-com\example\chatmoderator\utils\SchedulerUtil.class
-com\example\chatmoderator\utils\ModerationResult.class
-com\example\chatmoderator\commands\ChatModCommand.class
-com\example\chatmoderator\services\ModerationService.class
-com\example\chatmoderator\ChatModeratorPlugin.class
-com\example\chatmoderator\listeners\ChatListener.class
-com\example\chatmoderator\utils\ModerationResult$ViolationType.class
-com\example\chatmoderator\utils\ModerationResultCallback.class
-com\example\chatmoderator\config\ConfigManager.class

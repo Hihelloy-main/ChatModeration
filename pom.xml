@@ -1,11 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
     <artifactId>chat-moderator</artifactId>
-    <version>2.0.0</version>
+    <version>3.0.0</version>
     <packaging>jar</packaging>
 
     <name>ChatModerator</name>
@@ -25,7 +26,7 @@
     </repositories>
 
     <dependencies>
-        <!-- Spigot API -->
+        <!-- Spigot API (provided by server, do not shade) -->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
@@ -47,18 +48,11 @@
             <version>2.10.1</version>
         </dependency>
 
-        <!-- Folia Scheduler -->
+        <!-- FoliaScheduler -->
         <dependency>
             <groupId>com.cjcrafter</groupId>
             <artifactId>foliascheduler</artifactId>
             <version>0.7.2</version>
-        </dependency>
-
-        <!-- SLF4J -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.32</version>
         </dependency>
 
         <!-- Gemini API -->
@@ -68,24 +62,24 @@
             <version>1.0.0</version>
         </dependency>
 
-        <!-- Logback -->
+        <!-- Logback / SLF4J for runtime logging -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.2.6</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.32</version>
+        </dependency>
     </dependencies>
 
     <build>
         <finalName>${project.name}-${project.version}</finalName>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
+
         <plugins>
-            <!-- Compiler plugin for Java 17 -->
+            <!-- Java 17 compiler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -96,7 +90,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Shade plugin -->
+            <!-- Shade plugin to create a fully self-contained jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -104,9 +98,7 @@
                 <executions>
                     <execution>
                         <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
+                        <goals><goal>shade</goal></goals>
                         <configuration>
                             <relocations>
                                 <relocation>
@@ -121,14 +113,33 @@
                                     <pattern>com.cjcrafter.foliascheduler</pattern>
                                     <shadedPattern>com.example.chatmoderator.libs.foliascheduler</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>com.google.genai</pattern>
+                                    <shadedPattern>com.example.chatmoderator.libs.genai</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.google.auth</pattern>
+                                    <shadedPattern>com.example.chatmoderator.libs.googleauth</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.google.api</pattern>
+                                    <shadedPattern>com.example.chatmoderator.libs.googleapi</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>io.grpc</pattern>
+                                    <shadedPattern>com.example.chatmoderator.libs.grpc</shadedPattern>
+                                </relocation>
                             </relocations>
 
-                            <!-- Exclude multi-release Java 21 classes -->
                             <filters>
                                 <filter>
                                     <artifact>*:*</artifact>
                                     <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
                                         <exclude>META-INF/versions/**</exclude>
+                                        <exclude>META-INF/*.kotlin_module</exclude>
                                     </excludes>
                                 </filter>
                             </filters>

@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,6 +29,32 @@ public class ChatListener implements Listener {
         this.plugin = plugin;
         this.configManager = plugin.getConfigManager();
         this.moderationService = plugin.getModerationService();
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onChat(AsyncPlayerChatEvent event) {
+        if (configManager.isDebugEnabled() && configManager.shouldLogAllMessages()) {
+            Bukkit.getLogger().info("[DEBUG] Chat message from " + event.getPlayer().getName()
+                    + ": " + event.getMessage());
+        }
+
+        if (event.isCancelled()) {
+            if (configManager.isDebugEnabled()) {
+                Bukkit.getLogger().info("[DEBUG] Chat message from " + event.getPlayer().getName()
+                        + " was blocked.");
+            }
+        }
+
+        if (isMuted(event.getPlayer())) {
+            if (configManager.isDebugEnabled()) {
+                Bukkit.getLogger().info("[DEBUG] Muted player " + event.getPlayer().getName()
+                        + " attempted to send a message.");
+            }
+        }
+
+        if (configManager.isDebugEnabled()) {
+            Bukkit.getLogger().info("[DEBUG] Current muted players: " + mutedPlayers.keySet());
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -47,7 +74,7 @@ public class ChatListener implements Listener {
             for (String word : configManager.getBlockedWords()) {
                 if (message.toLowerCase().contains(word.toLowerCase())) {
                     event.setCancelled(true);
-                    blockMessage(player, message, "Contains blocked word: " + word);
+                    blockMessageAndBroadcast(player, message, "Contains blocked word: " + word);
                     return;
                 }
             }
@@ -55,6 +82,7 @@ public class ChatListener implements Listener {
 
         // Bypass permission
         if (player.hasPermission("chatmoderator.bypass")) {
+            event.setCancelled(false);
             return;
         }
 
@@ -66,23 +94,35 @@ public class ChatListener implements Listener {
                             // Ensure cancellation and player notification run on main thread
                             SchedulerUtil.runGlobal(() -> {
                                 event.setCancelled(true);
-                                blockMessage(player, message, moderationResult.getReason());
+                                blockMessageAndBroadcast(player, message, moderationResult.getReason());
                             });
                         }
                     });
         }
     }
 
-    private void blockMessage(Player player, String message, String reason) {
-        // Notify moderators
-        SchedulerUtil.runGlobal(() -> {
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                if (p.isOp() || p.hasPermission("chatmoderator.bypass")) {
-                    p.sendMessage(ChatColor.RED + "[MODERATION] " + player.getName()
-                            + " tried to send: " + message + " | Reason: " + reason);
-                }
-            }
-        });
+    // Prevent muted players from using /msg, /tell, /w, etc.
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
+        Player player = event.getPlayer();
+        if (!isMuted(player)) return;
+
+        String msg = event.getMessage().toLowerCase();
+        if (msg.startsWith("/msg ") || msg.startsWith("/tell ") || msg.startsWith("/w ") || msg.startsWith("/whisper ") || msg.startsWith("/pm ")) {
+            event.setCancelled(true);
+            player.sendMessage(ChatColor.RED + "You are muted and cannot send private messages.");
+        }
+    }
+
+    // Block message, mute, and broadcast to all players
+    private void blockMessageAndBroadcast(Player player, String message, String reason) {
+        // Broadcast to all players
+        String broadcastMsg = ChatColor.RED + "[MODERATION] " + player.getName()
+                + " has been muted for: " + reason + "\n" +
+                ChatColor.YELLOW + "Blocked message: " + message;
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.sendMessage(broadcastMsg);
+        }
 
         // Mute player
         int muteDurationSeconds = configManager.getMuteDurationSeconds();
