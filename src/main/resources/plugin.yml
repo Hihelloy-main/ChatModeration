@@ -1,5 +1,5 @@
 name: ChatModerator
-version: '${project.version}'
+version: 3.0.0
 main: com.example.chatmoderator.ChatModeratorPlugin
 folia-supported: true
 api-version: '1.20'
