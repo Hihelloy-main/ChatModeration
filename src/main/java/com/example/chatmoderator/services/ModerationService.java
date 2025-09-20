@@ -81,6 +81,9 @@ public class ModerationService {
         if (lower.contains("sex") || lower.contains("rape") || lower.equalsIgnoreCase("I'm horny") || lower.contains("horny") || lower.contains("nude") || lower.contains("naked") || lower.equalsIgnoreCase("I'm gonna rape you") || lower.equalsIgnoreCase("I'm going to goon") || lower.contains("goon") || lower.contains("blowjob") || lower.equalsIgnoreCase("I'm gonna blow you") || lower.contains("cum") || lower.equalsIgnoreCase("I'm cumming") || lower.equalsIgnoreCase("fuck me in the ass") || lower.equalsIgnoreCase("goon me") || lower.equalsIgnoreCase("fiddle with me") || lower.equalsIgnoreCase("twirl my pubes") || lower.contains("pubes") || lower.equalsIgnoreCase("blow me")) {
             return ModerationResult.block("Rule: sexual content keyword/keyphrase detected");
         }
+        if (lower.contains("spam")) {
+        return ModerationResult.safe();
+        }
         return ModerationResult.safe();
     }
 

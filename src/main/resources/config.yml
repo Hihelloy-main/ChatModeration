@@ -9,11 +9,7 @@ moderation:
 
   # Word filter configuration
   blocked-words:  # List of words that will be blocked from chat
-    - "badword1"
-    - "badword2"
-    - "spam"
-    - "inappropriate"
-    - "offensiveword"
+    - ""
 
   # AI moderation thresholds (0.0 to 1.0), these control the sensitivity of moderation
   thresholds:
