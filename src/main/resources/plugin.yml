@@ -1,6 +1,6 @@
 name: ChatModerator
 version: 3.0.0
-main: com.example.chatmoderator.ChatModeratorPlugin
+main: com.Hihelloy.chatmoderator.ChatModeratorPlugin
 folia-supported: true
 api-version: '1.20'
 author: Hihelloy

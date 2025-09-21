@@ -1,6 +1,6 @@
-package com.example.chatmoderator.config;
+package com.Hihelloy.chatmoderator.config;
 
-import com.example.chatmoderator.ChatModeratorPlugin;
+import com.Hihelloy.chatmoderator.ChatModeratorPlugin;
 import org.bukkit.configuration.file.FileConfiguration;
 import java.util.List;
 import java.util.Map;

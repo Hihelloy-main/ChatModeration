@@ -51,9 +51,9 @@ messages:
   message-blocked: "&cYour message was blocked by the chat filter."  # Message shown to the player when their message is blocked
   violation-warning: "&eYour message contains inappropriate content. You have been muted, ask an admin for an unmute."  # Message for players who are muted
   admin-notification: "&6[ChatMod] &c{player} &7tried to send: &f{message}"  # Message for admins notifying them of a violation
-  plugin-reloaded: "&aChat Moderator configuration reloaded!"  # Message displayed when the plugin is reloaded
-  plugin-enabled: "&aChat moderation enabled!"  # Message when the moderation system is enabled
-  plugin-disabled: "&cChat moderation disabled!"  # Message when the moderation system is disabled
+  plugin-reloaded: "&aChatModerator configuration reloaded!"  # Message displayed when the plugin is reloaded
+  plugin-enabled: "&aChatModerator enabled!"  # Message when the moderation system is enabled
+  plugin-disabled: "&cChatModerator disabled!"  # Message when the moderation system is disabled
 
 # Debug settings (Useful for troubleshooting)
 debug:

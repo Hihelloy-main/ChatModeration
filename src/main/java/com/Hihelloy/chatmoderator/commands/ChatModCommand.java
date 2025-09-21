@@ -1,11 +1,10 @@
-package com.example.chatmoderator.commands;
+package com.Hihelloy.chatmoderator.commands;
 
-import com.example.chatmoderator.ChatModeratorPlugin;
-import com.example.chatmoderator.config.ConfigManager;
-import com.example.chatmoderator.listeners.ChatListener;
-import com.example.chatmoderator.services.ModerationService;
-import com.example.chatmoderator.utils.ModerationResult;
-import com.example.chatmoderator.utils.SchedulerUtil;
+import com.Hihelloy.chatmoderator.ChatModeratorPlugin;
+import com.Hihelloy.chatmoderator.config.ConfigManager;
+import com.Hihelloy.chatmoderator.listeners.ChatListener;
+import com.Hihelloy.chatmoderator.services.ModerationService;
+import com.Hihelloy.chatmoderator.utils.SchedulerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.*;
@@ -103,6 +102,22 @@ public class ChatModCommand implements CommandExecutor, TabCompleter {
                 handleAITest(sender, String.join(" ", args).replaceFirst("aitest ", ""));
                 break;
 
+            case "mutedplayers":
+                if (!sender.hasPermission("chatmoderator.admin")) {
+                    sender.sendMessage(ChatColor.RED + "You don't have permission to use this command.");
+                    return true;
+                }
+                sender.sendMessage(ChatColor.GOLD + "=== Muted Players ===");
+                if (chatListener.getMutedPlayers().isEmpty()) {
+                    sender.sendMessage(ChatColor.YELLOW + "No players are currently muted.");
+                } else {
+                    for (Player p : chatListener.getMutedPlayers().keySet()) {
+                        long unmuteTime = chatListener.getMutedPlayers().get(p);
+                        String timeStr = (unmuteTime == -1) ? "Permanent" : (unmuteTime + " ms remaining");
+                        sender.sendMessage(ChatColor.YELLOW + p.getName() + " - " + timeStr);
+                    }
+                }
+                break;
             default:
                 sendHelpMessage(sender);
                 break;
@@ -232,7 +247,7 @@ public class ChatModCommand implements CommandExecutor, TabCompleter {
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1) {
-            String[] subcommands = {"reload", "status", "toggle", "add-word", "remove-word", "unmute", "aitest"};
+            String[] subcommands = {"reload", "status", "toggle", "add-word", "remove-word", "unmute", "aitest", "mutedplayers"};
             for (String sub : subcommands) {
                 if (sub.startsWith(args[0].toLowerCase())) completions.add(sub);
             }

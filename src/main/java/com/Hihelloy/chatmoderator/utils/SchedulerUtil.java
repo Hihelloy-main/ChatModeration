@@ -1,11 +1,11 @@
-package com.example.chatmoderator.utils;
+package com.Hihelloy.chatmoderator.utils;
 
 
 
 
 import com.cjcrafter.foliascheduler.TaskImplementation;
 import com.cjcrafter.foliascheduler.folia.FoliaTask;
-import com.example.chatmoderator.ChatModeratorPlugin;
+import com.Hihelloy.chatmoderator.ChatModeratorPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -18,8 +18,8 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 
 import static com.cjcrafter.foliascheduler.util.ServerVersions.isFolia;
-import static com.example.chatmoderator.ChatModeratorPlugin.plugin;
-import static com.example.chatmoderator.ChatModeratorPlugin.scheduler;
+import static com.Hihelloy.chatmoderator.ChatModeratorPlugin.plugin;
+import static com.Hihelloy.chatmoderator.ChatModeratorPlugin.scheduler;
 
 
 /**

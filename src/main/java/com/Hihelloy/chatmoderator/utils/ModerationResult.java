@@ -1,4 +1,4 @@
-package com.example.chatmoderator.utils;
+package com.Hihelloy.chatmoderator.utils;
 
 public class ModerationResult {
 

@@ -1,12 +1,12 @@
-package com.example.chatmoderator;
+package com.Hihelloy.chatmoderator;
 
 import com.cjcrafter.foliascheduler.FoliaCompatibility;
 import com.cjcrafter.foliascheduler.ServerImplementation;
-import com.example.chatmoderator.config.ConfigManager;
-import com.example.chatmoderator.listeners.ChatListener;
-import com.example.chatmoderator.services.ModerationService;
-import com.example.chatmoderator.commands.ChatModCommand;
-import com.example.chatmoderator.utils.SchedulerUtil;
+import com.Hihelloy.chatmoderator.config.ConfigManager;
+import com.Hihelloy.chatmoderator.listeners.ChatListener;
+import com.Hihelloy.chatmoderator.services.ModerationService;
+import com.Hihelloy.chatmoderator.commands.ChatModCommand;
+import com.Hihelloy.chatmoderator.utils.SchedulerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -52,7 +52,7 @@ public class ChatModeratorPlugin extends JavaPlugin {
         getCommand("chatmod").setExecutor(chatModCommand);
         getCommand("chatmod").setTabCompleter(chatModCommand);
 
-        log.info("ChatModerator plugin has been enabled!");
+        log.info(configManager.getPluginEnabled());
 
         // Warn if AI keys missing
         checkAPIKeys();
@@ -61,7 +61,7 @@ public class ChatModeratorPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         SchedulerUtil.shutdown();
-        log.info("ChatModerator plugin has been disabled!");
+        log.info(configManager.getPluginDisabled());
     }
 
     private void checkAPIKeys() {
@@ -95,6 +95,6 @@ public class ChatModeratorPlugin extends JavaPlugin {
     public void reloadPluginConfig() {
         configManager.reloadConfig();
         configManager.applyNewConfigOptions();
-        Bukkit.getLogger().info("ChatModerator reloaded!");
+        Bukkit.getLogger().info(configManager.getPluginReloaded());
     }
 }

@@ -1,10 +1,9 @@
-package com.example.chatmoderator.listeners;
+package com.Hihelloy.chatmoderator.listeners;
 
-import com.example.chatmoderator.ChatModeratorPlugin;
-import com.example.chatmoderator.config.ConfigManager;
-import com.example.chatmoderator.services.ModerationService;
-import com.example.chatmoderator.utils.ModerationResult;
-import com.example.chatmoderator.utils.SchedulerUtil;
+import com.Hihelloy.chatmoderator.ChatModeratorPlugin;
+import com.Hihelloy.chatmoderator.config.ConfigManager;
+import com.Hihelloy.chatmoderator.services.ModerationService;
+import com.Hihelloy.chatmoderator.utils.SchedulerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -69,16 +68,21 @@ public class ChatListener implements Listener {
             return;
         }
 
-        // Word filter check (immediate)
+// Word filter check (improved, only blocks whole words)
         if (configManager.isWordFilterEnabled()) {
-            for (String word : configManager.getBlockedWords()) {
-                if (message.toLowerCase().contains(word.toLowerCase())) {
+            String[] tokens = message.toLowerCase().split("\\W+");
+            java.util.Set<String> blocked = configManager.getBlockedWords().stream()
+                    .map(String::toLowerCase)
+                    .collect(java.util.stream.Collectors.toSet());
+            for (String token : tokens) {
+                if (blocked.contains(token)) {
                     event.setCancelled(true);
-                    blockMessageAndBroadcast(player, message, "Contains blocked word: " + word);
+                    blockMessageAndBroadcast(player, message, "Contains blocked word: " + token);
                     return;
                 }
             }
         }
+
 
         // Bypass permission
         if (player.hasPermission("chatmoderator.bypass")) {
